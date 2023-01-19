@@ -1,4 +1,4 @@
-# Curso Teste com Spring Boot, TDD e o novo JUnit5
+# Curso Teste com Spring Boot, TDD e JUnit5
 
 <h3> Hello World 👾 <h3>
 
