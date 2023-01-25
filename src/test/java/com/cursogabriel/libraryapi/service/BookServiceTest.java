@@ -22,7 +22,6 @@ public class BookServiceTest {
     @MockBean
     BookRepository repository;
 
-
     @BeforeEach
     public void setUp() {
         this.service = new BookServiceImpl( repository );
@@ -50,4 +49,6 @@ public class BookServiceTest {
         assertThat(savedBook.getTitle()).isEqualTo("fulaninhos");
         assertThat(savedBook.getAuthor()).isEqualTo("Fulano De tal");
     }
+
+
 }

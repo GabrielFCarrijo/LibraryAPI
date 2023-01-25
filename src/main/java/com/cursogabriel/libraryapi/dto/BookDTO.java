@@ -1,5 +1,6 @@
 package com.cursogabriel.libraryapi.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Getter
@@ -10,8 +11,12 @@ import lombok.*;
 public class BookDTO {
 
     private Long id;
+
+    @NotEmpty
     private String title;
+    @NotEmpty
     private String author;
+    @NotEmpty
     private String isbn;
 
 }
