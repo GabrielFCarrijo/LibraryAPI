@@ -2,6 +2,7 @@ package com.cursogabriel.libraryapi.resource;
 
 import com.cursogabriel.libraryapi.api.exeception.ApiErros;
 import com.cursogabriel.libraryapi.dto.BookDTO;
+import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.service.BookService;
 import jakarta.annotation.Resource;
@@ -45,4 +46,10 @@ public class BookController {
         return new ApiErros(bindingResult);
     }
 
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErros handleBusinessException(BusinessException ex) {
+
+        return new ApiErros(ex);
+    }
 }
