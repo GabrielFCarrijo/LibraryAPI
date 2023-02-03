@@ -4,8 +4,10 @@ import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.repository.BookRepository;
 import com.cursogabriel.libraryapi.service.BookService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 @Service
@@ -19,7 +21,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book book) {
-        if (repository.existsByISbn(book.getIsbn())) {
+        if (repository.existsByIsbn(book.getIsbn())) {
             throw new BusinessException("ISBN ja cadastrada");
         }
         return repository.save(book);
@@ -44,6 +46,11 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Book id cant be null");
         }
         return this.repository.save(book);
+    }
+
+    @Override
+    public Page<Book> find(Book filter, Pageable pageRequest) {
+        return null;
     }
 
 

@@ -3,8 +3,10 @@ package com.cursogabriel.libraryapi.resource;
 import com.cursogabriel.libraryapi.dto.BookDTO;
 import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
+import com.cursogabriel.libraryapi.model.repository.BookRepository;
 import com.cursogabriel.libraryapi.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -21,12 +25,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.awt.print.Pageable;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -40,7 +45,9 @@ public class BookControllerTest {
     @MockBean
     BookService service;
 
-    static String BOOK_API ="/api/books";
+    static String BOOK_API = "/api/books";
+    @Autowired
+    private BookRepository bookRepository;
 
     private static BookDTO createNewBook() {
         BookDTO dto = BookDTO.builder().author("Pi").title("As Aventuras").isbn("001").build();
@@ -85,12 +92,12 @@ public class BookControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors" , hasSize(3)));
+                .andExpect(jsonPath("errors", hasSize(3)));
     }
 
     @Test
     @DisplayName("Deve loançar erro se existir outro livro com mesma ISBN")
-    public void createBookWithDuplicatedIsbn() throws Exception{
+    public void createBookWithDuplicatedIsbn() throws Exception {
         String messageError = "ISBN ja cadastrada";
 
         BookDTO dto = createNewBook();
@@ -110,6 +117,7 @@ public class BookControllerTest {
                 .andExpect(jsonPath("errors[0]").value(messageError));
 
     }
+
     @Test
     @DisplayName("Deve obter informacoes sobre um livro")
     public void getBookDetailsTest() throws Exception {
@@ -230,5 +238,37 @@ public class BookControllerTest {
 
         mvc.perform(requestBuilders)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("find book test")
+    public void findBookTest() throws Exception {
+        Long id = 1l;
+
+        Book book = Book.builder()
+                .id(id)
+                .title(createNewBook().getTitle())
+                .author(createNewBook().getAuthor())
+                .isbn(createNewBook().getIsbn())
+                .build();
+
+        BDDMockito.given(service.find(Mockito.any(Book.class), Mockito.any(Pageable.class)))
+                .willReturn(new PageImpl<Book>(Arrays.asList(book), PageRequest.of(0, 100), 1));
+
+        String queryString = String.format("?title=%s&author=%s&page=0&size=100",
+                book.getTitle(),
+                book.getAuthor());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(BOOK_API.concat(queryString))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("pageable.pageSize").value(100))
+                .andExpect(jsonPath("pageable.pageNumber").value(0));
     }
 }

@@ -1,6 +1,5 @@
 package com.cursogabriel.libraryapi.service;
 
-import com.cursogabriel.libraryapi.dto.BookDTO;
 import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.repository.BookRepository;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -43,7 +41,7 @@ public class BookServiceTest {
     public void saveBookTest(){
         //cenario
         Book book = createValidBook();
-        Mockito.when(repository.existsByISbn(Mockito.anyString())).thenReturn(false);
+        Mockito.when(repository.existsByIsbn(Mockito.anyString())).thenReturn(false);
         Mockito.when( repository.save(book))
                 .thenReturn(Book.builder().id(1l)
                         .isbn("123")
@@ -71,7 +69,7 @@ public class BookServiceTest {
 
         //cenario
         Book book = createValidBook();
-        Mockito.when(repository.existsByISbn(Mockito.anyString())).thenReturn(true);
+        Mockito.when(repository.existsByIsbn(Mockito.anyString())).thenReturn(true);
 
         //execucao
         Throwable ex = Assertions.catchThrowable( () -> service.save(book));
