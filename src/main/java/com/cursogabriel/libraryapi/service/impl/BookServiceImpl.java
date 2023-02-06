@@ -7,7 +7,7 @@ import com.cursogabriel.libraryapi.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 @Service
@@ -52,6 +52,5 @@ public class BookServiceImpl implements BookService {
     public Page<Book> find(Book filter, Pageable pageRequest) {
         return null;
     }
-
 
 }

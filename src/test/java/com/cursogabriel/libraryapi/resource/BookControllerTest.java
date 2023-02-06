@@ -17,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
+
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -46,8 +48,6 @@ public class BookControllerTest {
     BookService service;
 
     static String BOOK_API = "/api/books";
-    @Autowired
-    private BookRepository bookRepository;
 
     private static BookDTO createNewBook() {
         BookDTO dto = BookDTO.builder().author("Pi").title("As Aventuras").isbn("001").build();
@@ -255,16 +255,17 @@ public class BookControllerTest {
         BDDMockito.given(service.find(Mockito.any(Book.class), Mockito.any(Pageable.class)))
                 .willReturn(new PageImpl<Book>(Arrays.asList(book), PageRequest.of(0, 100), 1));
 
+
         String queryString = String.format("?title=%s&author=%s&page=0&size=100",
                 book.getTitle(),
                 book.getAuthor());
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(BOOK_API.concat(queryString))
                 .accept(MediaType.APPLICATION_JSON);
 
         mvc
-                .perform(requestBuilder)
+                .perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("content", Matchers.hasSize(1)))
                 .andExpect(jsonPath("totalElements").value(1))
