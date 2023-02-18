@@ -1,22 +1,33 @@
 package com.cursogabriel.libraryapi.repository;
 
 import com.cursogabriel.libraryapi.model.entity.Book;
+import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.model.repository.LoanRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import javax.swing.*;
+import java.time.LocalDate;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
+@EntityScan(basePackages = "io.summer")
 public class LoanRepositoryTest {
+
+
+    private static Book createNewBook(String isbn) {
+        Book book = Book.builder().author("Pi").title("As Aventuras").isbn(isbn).build();
+        return book;
+    }
 
     @Autowired
     private LoanRepository repository;
@@ -24,25 +35,21 @@ public class LoanRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    private static Book createNewBook(String isbn) {
-        Book book = Book.builder().author("Pi").title("As Aventuras").isbn(isbn).build();
-        return book;
-    }
 
     @Test
     @DisplayName("Deve verificar se existe emprestimo nao devolvido para o livro")
     public void existsByBookAndNotReturnd () {
-
+        //cenario
         Book book = createNewBook("123");
+        entityManager.persist(book);
+        Loan loan = Loan.builder().book(book).customer("Fulano").localDate(LocalDate.now()).build();
+        entityManager.persist(loan);
 
-        entityManager().persist(book);
-        entityManager().persist(loan);
+        //execucao
+        boolean exists = repository.existsByBookAndNotReturnd(book);
 
-        repository.existsByBookAndNotReturnd(book);
+        //verificacao
+        assertThat(exists).isTrue();
 
-    }
-
-    private TestEntityManager entityManager() {
-        return null;
     }
 }
