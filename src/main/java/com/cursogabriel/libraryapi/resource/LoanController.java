@@ -1,6 +1,7 @@
 package com.cursogabriel.libraryapi.resource;
 
 import com.cursogabriel.libraryapi.dto.LoanDTO;
+import com.cursogabriel.libraryapi.dto.ReturnedLoanDTO;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.service.BookService;
@@ -38,5 +39,11 @@ public class LoanController {
         return entity.getId();
     }
 
-
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void returnedBook(@PathVariable Long id, @RequestBody ReturnedLoanDTO dto) {
+        Loan loan = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        loan.setReturned(dto.getReturned());
+        service.update(loan);
+    }
 }

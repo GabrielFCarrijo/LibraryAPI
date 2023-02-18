@@ -6,6 +6,8 @@ import com.cursogabriel.libraryapi.model.repository.LoanRepository;
 import com.cursogabriel.libraryapi.service.Loanservice;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 public class LoanServiceImpl implements Loanservice {
 
     private LoanRepository repository;
@@ -20,5 +22,15 @@ public class LoanServiceImpl implements Loanservice {
             throw new BusinessException("Book alredy loaned");
         }
         return repository.save(loan);
+    }
+
+    @Override
+    public Optional<Loan> getById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Loan update(Loan loan) {
+        return null;
     }
 }
