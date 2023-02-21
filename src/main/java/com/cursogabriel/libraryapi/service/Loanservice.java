@@ -1,6 +1,7 @@
 package com.cursogabriel.libraryapi.service;
 
 import com.cursogabriel.libraryapi.dto.LoanFilterDTO;
+import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.resource.BookController;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface Loanservice {
     Loan update(Loan loan);
 
     Page<Loan> find(LoanFilterDTO filterDTO, Pageable pageable);
+
+    Page<Loan> getLoansByBook(Book book, Pageable pageable);
 }
