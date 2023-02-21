@@ -3,7 +3,6 @@ package com.cursogabriel.libraryapi.resource;
 import com.cursogabriel.libraryapi.dto.BookDTO;
 import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
-import com.cursogabriel.libraryapi.model.repository.BookRepository;
 import com.cursogabriel.libraryapi.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;

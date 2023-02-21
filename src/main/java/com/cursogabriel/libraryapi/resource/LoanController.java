@@ -7,14 +7,14 @@ import com.cursogabriel.libraryapi.dto.ReturnedLoanDTO;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.service.BookService;
-import com.cursogabriel.libraryapi.service.Loanservice;
+import com.cursogabriel.libraryapi.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,12 +24,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/loans")
-@RequiredArgsConstructor
+@Component
 public class LoanController {
 
-    private final Loanservice service;
+    private final LoanService service;
     private final BookService bookService;
     private final ModelMapper modelMapper;
+
+    public LoanController(LoanService service, BookService bookService, ModelMapper modelMapper) {
+        this.service = service;
+        this.bookService = bookService;
+        this.modelMapper = modelMapper;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

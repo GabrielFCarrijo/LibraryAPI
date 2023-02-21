@@ -3,13 +3,13 @@ package com.cursogabriel.libraryapi.service;
 import com.cursogabriel.libraryapi.dto.LoanFilterDTO;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
-import com.cursogabriel.libraryapi.resource.BookController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-public interface Loanservice {
+@Service
+public interface LoanService {
     Loan save(Loan loan);
 
     Optional<Loan> getById(Long id);

@@ -10,10 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +30,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @ActiveProfiles("test")
 public class LoanServiceTest {
 
-    Loanservice service;
+    LoanService service;
     @MockBean
     LoanRepository repository;
 

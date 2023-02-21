@@ -8,15 +8,13 @@ import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.service.BookService;
 import com.cursogabriel.libraryapi.service.LoanServiceTest;
-import com.cursogabriel.libraryapi.service.Loanservice;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.cursogabriel.libraryapi.service.LoanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,7 +50,7 @@ public class LoanControllerTest {
     BookService bookService;
 
     @MockBean
-    Loanservice loanService;
+    LoanService loanService;
 
     @Test
     @DisplayName("Deve realizar um emprestimo")

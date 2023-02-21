@@ -5,14 +5,13 @@ import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.model.repository.LoanRepository;
-import com.cursogabriel.libraryapi.service.Loanservice;
+import com.cursogabriel.libraryapi.service.LoanService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-public class LoanServiceImpl implements Loanservice {
+public class LoanServiceImpl implements LoanService {
 
     private LoanRepository repository;
 

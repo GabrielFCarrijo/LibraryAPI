@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-@Service
 public class BookServiceImpl implements BookService {
 
     private BookRepository repository;

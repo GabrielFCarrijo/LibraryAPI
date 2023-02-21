@@ -1,21 +1,17 @@
 package com.cursogabriel.libraryapi.resource;
 
-import com.cursogabriel.libraryapi.api.exeception.ApiErros;
 import com.cursogabriel.libraryapi.dto.BookDTO;
 import com.cursogabriel.libraryapi.dto.LoanDTO;
-import com.cursogabriel.libraryapi.exeption.BusinessException;
 import com.cursogabriel.libraryapi.model.entity.Book;
 import com.cursogabriel.libraryapi.model.entity.Loan;
 import com.cursogabriel.libraryapi.service.BookService;
-import com.cursogabriel.libraryapi.service.Loanservice;
-import lombok.RequiredArgsConstructor;
+import com.cursogabriel.libraryapi.service.LoanService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,12 +22,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/books")
-@RequiredArgsConstructor
+@Component
 public class BookController {
 
     private final BookService service;
     private final ModelMapper modelMapper;
-    private final Loanservice loanservice;
+    private final LoanService loanservice;
+
+    public BookController(BookService service, ModelMapper modelMapper, LoanService loanservice) {
+        this.service = service;
+        this.modelMapper = modelMapper;
+        this.loanservice = loanservice;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,13 +72,13 @@ public class BookController {
     }
 
     @PutMapping("{id}")
-    public BookDTO update(@PathVariable Long id, BookDTO dto) {
+    public BookDTO update(@PathVariable Long id,BookDTO dto) {
         return service.getById(id).map(book -> {
             book.setTitle(dto.getTitle());
             book.setAuthor(dto.getAuthor());
             book = service.update(book);
             return modelMapper.map(book, BookDTO.class);
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
     }
 
